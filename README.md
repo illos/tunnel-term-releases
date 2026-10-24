@@ -23,18 +23,25 @@ there: no VPN, no screen sharing, nothing to install on the engineer's side.
   code to read out to the engineer.
 - You see everything the engineer does, can type in the same terminals, and
   can end the session at any time.
+- Set the laptop's test Ethernet port yourself (VLAN, static IP, routes),
+  with or without a remote session, and **Put back** when you're done.
 
 **For the remote engineer** (any modern browser)
 
 - Shared terminal tabs: the serial console, plus SSH, telnet, raw TCP,
   ping, traceroute and TCP port checks, all run *from the laptop*.
+- A **command box** for typing over slow links: editing is instant, and
+  commands queue while the connection drops, then go out when it's back.
+  A connection indicator shows how the laptop's link is doing.
 - Control of the laptop's test Ethernet port: VLAN ID, static IP, DHCP,
-  routes and bounce. Every change undoes itself after 60 seconds unless you
-  click **Keep**.
+  routes and bounce. Every change undoes itself after 1, 2 or 5 minutes
+  (your choice) unless you click **Keep**.
 - Files: upload firmware or configs, serve them to the device over TFTP or
   HTTP, and push or pull them over SFTP.
 - Paced paste for long configs, so a console without flow control doesn't
   drop characters.
+- Built for phone hotspots: the page is cached by Cloudflare, and a session
+  survives dropouts of up to 15 minutes.
 
 **Safe by design**
 
@@ -146,10 +153,17 @@ page reconnects by itself and the terminal picks up where it left off.
 
 ### 2. Work the console
 
-Tabs are shared with the technician. The toolbar has **Send BREAK**, a
-**Ctrl** menu, **Paste…**, live serial **Settings** (baud, parity…) and
-**Download scrollback**, which saves the tab's recent output to your own
-computer.
+Tabs are shared with the technician. Type commands in the **command box**
+under the terminal: editing is local, so there's no lag on a slow link, and
+Enter sends the line. If the laptop stops answering, commands queue above
+the box and go out in order when it's back. A command caught mid-send when
+the link dropped is marked **not confirmed**, and the queue waits for you.
+Click into the terminal for direct typing: Tab completion, `?`, pagers,
+Ctrl-C. The bars at the top show the laptop's connection.
+
+The toolbar has **Send BREAK**, a **Ctrl** menu, **Paste…**, live serial
+**Settings** (baud, parity…) and **Download scrollback**, which saves the
+tab's recent output to your own computer.
 
 ![The shared console with the Network panel](docs/screenshots/eng-2-console.png)
 
@@ -157,8 +171,9 @@ computer.
 
 Open **Network**, then **Change** on the test adapter. You can set the VLAN
 ID, a static IP or DHCP, add routes, or bounce the adapter. Every change
-shows a countdown. Click **Keep** within 60 seconds or it undoes itself,
-like `commit confirmed`. If a change cuts you off, it reverts and you're
+shows a countdown. Click **Keep** in time or it undoes itself, like
+`commit confirmed`. Pick 1, 2 or 5 minutes in the change dialog; use a
+longer one on a slow link. If a change cuts you off, it reverts and you're
 back.
 
 <img src="docs/screenshots/eng-3-vlan-dialog.png" width="49%" alt="Setting a VLAN ID"> <img src="docs/screenshots/eng-4-auto-undo.png" width="49%" alt="The auto-undo countdown with Keep and Undo">
